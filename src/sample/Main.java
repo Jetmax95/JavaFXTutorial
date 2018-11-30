@@ -14,26 +14,27 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
-        window.setTitle("Title here");
+        window.setTitle("Tutorial");
 
-        Button button1 = new Button("Click me");
+        Button button = new Button("Close Program");
+        button.setOnAction(e -> closeProgram());
 
-        button1.setOnAction(e -> {
-            boolean result  = ConfirmBox.display("Title","Are you sure you want to send?");
-            System.out.println(result);
+        window.setOnCloseRequest(e -> {
+            e.consume(); //Consume the close button event
+            closeProgram();
         });
 
-
         StackPane layout = new StackPane();
-        layout.getChildren().add(button1);
-
+        layout.getChildren().add(button);
         Scene scene = new Scene(layout, 300, 250);
-
         window.setScene(scene);
         window.show();
     }
 
-
+    private void closeProgram(){
+        boolean answer = ConfirmBox.display("Title", "Are you sure you want to exit the program?");
+        if(answer) window.close();
+    }
 
     public static void main(String[] args) {
         launch(args);
