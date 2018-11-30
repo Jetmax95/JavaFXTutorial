@@ -1,27 +1,27 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 
     Stage window;
-    Scene scene1, scene2;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
+        window.setTitle("Title here");
 
         Button button1 = new Button("Click me");
-        button1.setOnAction(e -> AlertBox.display("Title","HELLO"));
+
+        button1.setOnAction(e -> {
+            boolean result  = ConfirmBox.display("Title","Are you sure you want to send?");
+            System.out.println(result);
+        });
 
 
         StackPane layout = new StackPane();
@@ -30,7 +30,6 @@ public class Main extends Application {
         Scene scene = new Scene(layout, 300, 250);
 
         window.setScene(scene);
-        window.setTitle("Title here");
         window.show();
     }
 
