@@ -7,51 +7,72 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import jdk.nashorn.api.tree.Tree;
 import org.w3c.dom.Text;
 
 public class Main extends Application {
 
 
     Stage window;
-    Button button;
+    TreeView<String> tree;
+
     Scene scene;
-    ListView<String> listView;
+
+    //Every tree has one single root.
+    //To the root we can add branches
+    //We can add branches to the branches
+    //Then we can have leaf notes
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         window = primaryStage;
-        window.setTitle("ComboBox Demo");
-        button = new Button("Submit");
-
-        listView = new ListView<>();
-        listView.getItems().addAll("Iron Man", "Titanic", "Contact", "Surrogates");
-        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //Able to select mutliple choices
+        window.setTitle("TreeView tutorial");
 
 
-        button.setOnAction(e -> buttonClicked());
+        TreeItem<String> root, bucky, megan;
 
 
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(20,20,20,20));
-        layout.getChildren().addAll(listView,button);
+        //Root
+        root = new TreeItem<>();
+        root.setExpanded(true);
 
+        //Bucky
+        bucky = makeBranch("Bucky", root); //Name and parent
+        makeBranch("thenewboston", bucky);
+        makeBranch("Youtube", bucky);
+        makeBranch("Chicken", bucky);
+
+
+        //Megan
+
+        megan = makeBranch("Megan", root); //Name and parent
+        makeBranch("Glitter", megan);
+        makeBranch("Makeup", megan);
+
+        // Create tree
+        tree = new TreeView<>(root); // All trees need a root passed in
+        tree.setShowRoot(false); // An auto einai true fainetai ena epipleon root apo panw to opoio einai adeio
+        tree.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+            if(newValue != null) System.out.println(newValue);
+        });
+
+        //Layout
+        StackPane layout = new StackPane();
+        layout.getChildren().add(tree);
         scene = new Scene(layout, 300, 250);
         window.setScene(scene);
         window.show();
     }
 
-    private void buttonClicked(){
-        ObservableList<String> movies;
-        movies = listView.getSelectionModel().getSelectedItems();
 
-        for(String m: movies){
-            System.out.println(m);
-        }
-
-
-
+    private TreeItem<String> makeBranch(String name, TreeItem<String> root){
+        TreeItem<String> branch = new TreeItem<>(name);
+        branch.setExpanded(true);
+        root.getChildren().add(branch);
+        return branch;
     }
+
     public static void main(String[] args) {
         launch(args);
     }
