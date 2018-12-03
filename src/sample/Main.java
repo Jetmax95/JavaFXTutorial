@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -14,37 +15,43 @@ public class Main extends Application {
     Stage window;
     Button button;
     Scene scene;
+    ListView<String> listView;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         window = primaryStage;
-        window.setTitle("Choice Box Tutorial");
-        button = new Button("Click me");
+        window.setTitle("ComboBox Demo");
+        button = new Button("Submit");
 
-        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        listView = new ListView<>();
+        listView.getItems().addAll("Iron Man", "Titanic", "Contact", "Surrogates");
+        listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE); //Able to select mutliple choices
 
 
-        //getItems returns the ObservableList object which you can add items to
-        choiceBox.getItems().addAll("Apples","Banana","Kiwi","Melon");
-        choiceBox.setValue(choiceBox.getItems().get(0));
+        button.setOnAction(e -> buttonClicked());
 
-        //Listen for selection changes Different types of lists have different types of selection models
-        choiceBox.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> System.out.println(newValue) );
-        // v is the property of the item, oldValue would be the previous selected item, newValue is the new item
-        //Layout
+
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20,20,20,20));
-        layout.getChildren().addAll(choiceBox, button);
-
+        layout.getChildren().addAll(listView,button);
 
         scene = new Scene(layout, 300, 250);
         window.setScene(scene);
         window.show();
     }
 
+    private void buttonClicked(){
+        ObservableList<String> movies;
+        movies = listView.getSelectionModel().getSelectedItems();
+
+        for(String m: movies){
+            System.out.println(m);
+        }
 
 
+
+    }
     public static void main(String[] args) {
         launch(args);
     }
