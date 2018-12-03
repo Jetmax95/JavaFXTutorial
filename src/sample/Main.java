@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -21,21 +22,24 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         window = primaryStage;
-        window.setTitle("Tutorial");
+        window.setTitle("Bucky's Meat Subs");
 
-        //Form
-        TextField nameInput = new TextField();
 
-        button = new Button("Click me");
-        button.setOnAction(e -> {
-            isInt(nameInput, nameInput.getText());
-        });
+
+        CheckBox box1 = new CheckBox("Bacon");
+        box1.setSelected(true); // Have it checked as default
+        CheckBox box2 = new CheckBox("Tuna");
+        CheckBox box3 = new CheckBox("Chicken");
+
+        button = new Button("Order");
+        button.setOnAction(e -> handleOptions(box1, box2, box3));
+
 
 
         //Layout
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20,20,20,20));
-        layout.getChildren().addAll(nameInput,button);
+        layout.getChildren().addAll(box1,box2,box3,button);
 
 
         scene = new Scene(layout, 300, 250);
@@ -43,18 +47,21 @@ public class Main extends Application {
         window.show();
     }
 
-    private boolean isInt(TextField input, String message){
-        try{
-            int age = Integer.parseInt(input.getText()); // This is going to get the message and try to convert it to an Integer, if it cannot it will return an error
-            System.out.println("User is: " + age);
-            return true;
+    private void handleOptions(CheckBox box1, CheckBox box2, CheckBox box3){
+        String message = "";
 
-        }catch(NumberFormatException e){
-            System.out.println("Error: " + message + " is not a number");
-            return false;
-        }
+        if(box1.isSelected())
+            message += " " + box1.getText();
+
+        if(box2.isSelected())
+            message += " " + box2.getText();
+
+        if(box3.isSelected())
+            message += " " + box3.getText();
+
+        System.out.println("User's order:");
+        System.out.println(message);
     }
-
     public static void main(String[] args) {
         launch(args);
     }
