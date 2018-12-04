@@ -16,78 +16,57 @@ public class Main extends Application {
 
 
     Stage window;
-    BorderPane layout;
-
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         window = primaryStage;
-        window.setTitle("Making Menus tutorial");
+        window.setTitle("CSS Themes and Styles");
 
-        //File menu
-        Menu fileMenu = new Menu("_File");
 
-        //Menu items
-        MenuItem newFile = new MenuItem("New...");
-        newFile.setOnAction(e -> System.out.println("Create a new file..."));
-        fileMenu.getItems().add(newFile);
 
-        fileMenu.getItems().add(new MenuItem("Open..."));
-        fileMenu.getItems().add(new MenuItem("Save"));
-        fileMenu.getItems().add(new SeparatorMenuItem());
-        fileMenu.getItems().add(new MenuItem("Settings"));
-        fileMenu.getItems().add(new MenuItem("Exit"));
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10,10,10,10));
+        grid.setVgap(8);
+        grid.setHgap(10);
 
-        //Edit menu
-        Menu editMenu = new Menu("_Edit");
-        editMenu.getItems().add(new MenuItem("Cut"));
-        editMenu.getItems().add(new MenuItem("Copy"));
+        //Name label - constrains use (child,column,row)
+        Label nameLabel = new Label("Username: ");
+        nameLabel.setId("bold-label"); //Selection by ID
+        GridPane.setConstraints(nameLabel, 0, 0);
 
-        MenuItem paste = new MenuItem("Paste");
-        paste.setOnAction(e -> System.out.println("Pasting some crap"));
-        editMenu.getItems().add(paste);
+        //Name input
+        TextField nameInput = new TextField();
+        nameInput.setPromptText("username");
+        GridPane.setConstraints(nameInput, 1, 0 );
 
-        //Help menu
-        Menu helpMenu = new Menu("Help");
-        CheckMenuItem showLines = new CheckMenuItem("Show Line numbers");
+        //Password label
+        Label passLabel = new Label("Password: ");
+        GridPane.setConstraints(passLabel,0,1);
 
-        showLines.setOnAction(e -> {
-            if(showLines.isSelected())
-                System.out.println("Program will now display line numbers");
-            else
-                System.out.println("Hiding line numbers");
+        //Password input
+        TextField passInput = new TextField();
+        passInput.setPromptText("password");
+        GridPane.setConstraints(passInput,1,1);
+
+        //Login button
+        Button loginButton = new Button("Log in");
+        GridPane.setConstraints(loginButton,1,2);
+
+        loginButton.setOnAction(e -> {
+            setUserAgentStylesheet(STYLESHEET_CASPIAN);
         });
 
-        CheckMenuItem autoSave = new CheckMenuItem("Enable Autosave");
-        autoSave.setSelected(true);
+        //Sign up
+        Button signUpButton = new Button("Sign up");
+        signUpButton.getStyleClass().add("button-blue"); // Selection by class
+        GridPane.setConstraints(signUpButton, 1 , 3);
 
-        helpMenu.getItems().addAll(showLines, autoSave);
+        //Add everything to grid
+        grid.getChildren().addAll(nameLabel,nameInput,passLabel,passInput,loginButton,signUpButton);
 
-
-        //Difficulty RadioMenuItems
-        Menu difficultyMenu = new Menu("Difficulty");
-        ToggleGroup difficultyToggle = new ToggleGroup(); //User can only select one item at the time
-
-        RadioMenuItem easy = new RadioMenuItem("Easy");
-        RadioMenuItem medium = new RadioMenuItem("Medium");
-        RadioMenuItem hard = new RadioMenuItem("Hard");
-
-        easy.setToggleGroup((difficultyToggle));
-        medium.setToggleGroup((difficultyToggle));
-        hard.setToggleGroup((difficultyToggle));
-
-        difficultyMenu.getItems().addAll(easy,medium,hard);
-
-        //Main menu bar
-        MenuBar menuBar = new MenuBar();
-        menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu, difficultyMenu);
-
-
-        layout = new BorderPane();
-        layout.setTop(menuBar);
-
-        Scene scene = new Scene(layout, 400, 300);
+        Scene scene = new Scene(grid, 400, 300);
+        scene.getStylesheets().add("sample/Viper.css");
         window.setScene(scene);
         window.show();
     }
