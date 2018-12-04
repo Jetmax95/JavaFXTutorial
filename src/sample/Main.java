@@ -16,56 +16,28 @@ public class Main extends Application {
 
 
     Stage window;
+    Button button;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         window = primaryStage;
-        window.setTitle("CSS Themes and Styles");
+        window.setTitle("Properties");
 
+        Person bucky = new Person();
+        bucky.firstNameProperty().addListener((v, oldValue, newValue) -> {
+            System.out.println("Name changed to " + newValue);
+            System.out.println("firstNameProperty(): " + bucky.firstNameProperty());
+            System.out.println("getFirstName(): " + bucky.getFirstName());
 
-
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,10,10));
-        grid.setVgap(8);
-        grid.setHgap(10);
-
-        //Name label - constrains use (child,column,row)
-        Label nameLabel = new Label("Username: ");
-        nameLabel.setId("bold-label"); //Selection by ID
-        GridPane.setConstraints(nameLabel, 0, 0);
-
-        //Name input
-        TextField nameInput = new TextField();
-        nameInput.setPromptText("username");
-        GridPane.setConstraints(nameInput, 1, 0 );
-
-        //Password label
-        Label passLabel = new Label("Password: ");
-        GridPane.setConstraints(passLabel,0,1);
-
-        //Password input
-        TextField passInput = new TextField();
-        passInput.setPromptText("password");
-        GridPane.setConstraints(passInput,1,1);
-
-        //Login button
-        Button loginButton = new Button("Log in");
-        GridPane.setConstraints(loginButton,1,2);
-
-        loginButton.setOnAction(e -> {
-            setUserAgentStylesheet(STYLESHEET_CASPIAN);
         });
 
-        //Sign up
-        Button signUpButton = new Button("Sign up");
-        signUpButton.getStyleClass().add("button-blue"); // Selection by class
-        GridPane.setConstraints(signUpButton, 1 , 3);
+        button = new Button("Submit");
+        button.setOnAction(e -> bucky.setFirstName("Porky"));
 
-        //Add everything to grid
-        grid.getChildren().addAll(nameLabel,nameInput,passLabel,passInput,loginButton,signUpButton);
-
-        Scene scene = new Scene(grid, 400, 300);
+        StackPane layout = new StackPane();
+        layout.getChildren().add(button);
+        Scene scene = new Scene(layout, 400, 300);
         scene.getStylesheets().add("sample/Viper.css");
         window.setScene(scene);
         window.show();
