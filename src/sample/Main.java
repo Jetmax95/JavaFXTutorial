@@ -16,64 +16,78 @@ public class Main extends Application {
 
 
     Stage window;
-    TableView<Product> table;
-    TextField nameInput, priceInput, quantityInput;
+    BorderPane layout;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         window = primaryStage;
-        window.setTitle("TableView tutorial");
+        window.setTitle("Making Menus tutorial");
 
-        //Name column
-        TableColumn<Product, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setMinWidth(200);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        //File menu
+        Menu fileMenu = new Menu("_File");
 
-        //Price column
-        TableColumn<Product, Double> priceColumn = new TableColumn<>("Price");
-        priceColumn.setMinWidth(200);
-        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        //Menu items
+        MenuItem newFile = new MenuItem("New...");
+        newFile.setOnAction(e -> System.out.println("Create a new file..."));
+        fileMenu.getItems().add(newFile);
 
-        //Quantity column
-        TableColumn<Product, Integer> quantityColumn = new TableColumn<>("Qt.");
-        quantityColumn.setMinWidth(100);
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        fileMenu.getItems().add(new MenuItem("Open..."));
+        fileMenu.getItems().add(new MenuItem("Save"));
+        fileMenu.getItems().add(new SeparatorMenuItem());
+        fileMenu.getItems().add(new MenuItem("Settings"));
+        fileMenu.getItems().add(new MenuItem("Exit"));
 
-        //Name input
-        nameInput = new TextField();
-        nameInput.setPromptText("Name");
-        nameInput.setMinWidth(100);
+        //Edit menu
+        Menu editMenu = new Menu("_Edit");
+        editMenu.getItems().add(new MenuItem("Cut"));
+        editMenu.getItems().add(new MenuItem("Copy"));
 
-        //Price Input
-        priceInput = new TextField();
-        priceInput.setPromptText("Price");
+        MenuItem paste = new MenuItem("Paste");
+        paste.setOnAction(e -> System.out.println("Pasting some crap"));
+        editMenu.getItems().add(paste);
 
-        //Quantity Input
-        quantityInput= new TextField();
-        quantityInput.setPromptText("Quantity");
+        //Help menu
+        Menu helpMenu = new Menu("Help");
+        CheckMenuItem showLines = new CheckMenuItem("Show Line numbers");
 
-        //Buttons
-        Button addButton = new Button("Add");
-        addButton.setOnAction(e -> addButtonClicked());
-        Button deleteButton = new Button("Delete");
-        deleteButton.setOnAction(e -> deleteButtonClicked());
+        showLines.setOnAction(e -> {
+            if(showLines.isSelected())
+                System.out.println("Program will now display line numbers");
+            else
+                System.out.println("Hiding line numbers");
+        });
 
-        HBox hBox = new HBox();
-        hBox.setPadding(new Insets(10,10,10,10));
-        hBox.setSpacing(10);
-        hBox.getChildren().addAll(nameInput,priceInput,quantityInput,addButton,deleteButton);
+        CheckMenuItem autoSave = new CheckMenuItem("Enable Autosave");
+        autoSave.setSelected(true);
+
+        helpMenu.getItems().addAll(showLines, autoSave);
 
 
+        //Difficulty RadioMenuItems
+        Menu difficultyMenu = new Menu("Difficulty");
+        ToggleGroup difficultyToggle = new ToggleGroup(); //User can only select one item at the time
 
-        table = new TableView<>();
-        table.setItems(getProduct());
-        table.getColumns().addAll(nameColumn,priceColumn,quantityColumn);
+        RadioMenuItem easy = new RadioMenuItem("Easy");
+        RadioMenuItem medium = new RadioMenuItem("Medium");
+        RadioMenuItem hard = new RadioMenuItem("Hard");
 
-        VBox vBox = new VBox();
-        vBox.getChildren().addAll(table, hBox);
+        easy.setToggleGroup((difficultyToggle));
+        medium.setToggleGroup((difficultyToggle));
+        hard.setToggleGroup((difficultyToggle));
 
-        Scene scene = new Scene(vBox);
+        difficultyMenu.getItems().addAll(easy,medium,hard);
+
+        //Main menu bar
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(fileMenu, editMenu, helpMenu, difficultyMenu);
+
+
+        layout = new BorderPane();
+        layout.setTop(menuBar);
+
+        Scene scene = new Scene(layout, 400, 300);
         window.setScene(scene);
         window.show();
     }
@@ -82,33 +96,6 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void addButtonClicked(){
-        Product p = new Product();
-        p.setName(nameInput.getText());
-        p.setPrice(Double.parseDouble(priceInput.getText()));
-        p.setQuantity(Integer.parseInt(quantityInput.getText()));
-        table.getItems().add(p);
-        nameInput.clear();
-        priceInput.clear();
-        quantityInput.clear();
-    }
 
-    public void deleteButtonClicked(){
-        ObservableList<Product> productsSelected, allProducts; //The item they have highlighted, All the products
-        allProducts = table.getItems();
-        productsSelected = table.getSelectionModel().getSelectedItems();
 
-        productsSelected.forEach(allProducts::remove);
-    }
-    // Get all of the products
-    public ObservableList<Product> getProduct(){
-
-        ObservableList<Product> products = FXCollections.observableArrayList();
-        products.add(new Product("Washing Maching", 6000, 10));
-        products.add(new Product("Dryer Maching", 5000, 10));
-        products.add(new Product("Pizza oven", 500.23, 50));
-        products.add(new Product("Boiler", 200.90, 20));
-        products.add(new Product("Pony", 20000, 1));
-        return products;
-    }
 }
