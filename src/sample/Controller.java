@@ -8,11 +8,10 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
 
-    public Button button;
 
-    public void handleButton(){
-        System.out.println("Button clicked");
-        button.setText("Stop touching me");
+
+    public void loginButtonClicked(){
+        System.out.println("User Logged in...");
     }
 
     // This method is called as soon as the view loads
